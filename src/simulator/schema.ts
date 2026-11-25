@@ -4,10 +4,6 @@ import { MAX_PROCESSES } from "./types";
 
 export const algorithmIdSchema = z.enum(ALGORITHM_IDS);
 
-/**
- * A form field holding a whole number >= min, e.g. "3" -> 3.
- * Checked as a non-empty string first: z.coerce.number() alone would turn "" into 0 and let it pass.
- */
 const wholeNumber = (min: number) =>
   z.string().trim().min(1).pipe(z.coerce.number<string>().int().min(min));
 
@@ -17,7 +13,6 @@ const processSchema = z.object({
   priority: wholeNumber(0).optional(),
 });
 
-/** Validates the form's raw string values and turns them into the scheduling engine's input. */
 export const simInputSchema = z
   .object({
     algorithm: algorithmIdSchema,
@@ -26,7 +21,6 @@ export const simInputSchema = z
       .array(processSchema)
       .min(1)
       .max(MAX_PROCESSES)
-      // Process ids follow table order: P1 = 1, P2 = 2, ...
       .transform((processes) => processes.map((process, index) => ({ id: index + 1, ...process }))),
   })
   .superRefine((input, ctx) => {
@@ -34,7 +28,6 @@ export const simInputSchema = z
       ctx.addIssue({ code: "custom", message: "Round Robin needs a time quantum.", path: ["timeQuantum"] });
     }
 
-    // Priorities are all-or-nothing, and Priority Scheduling can't run without them.
     const withPriority = input.processes.filter((process) => process.priority !== undefined).length;
     const needsPriority = input.algorithm === "priority" || withPriority > 0;
     if (needsPriority && withPriority < input.processes.length) {
@@ -46,8 +39,6 @@ export const simInputSchema = z
     }
   });
 
-/** What the form sends to the schema: every value is still the raw input string. */
 export type SimFormValues = z.input<typeof simInputSchema>;
 
-/** What the scheduling engine receives: parsed numbers, with an id on each process. */
 export type SimInput = z.output<typeof simInputSchema>;

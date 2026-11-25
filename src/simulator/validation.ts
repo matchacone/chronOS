@@ -3,7 +3,6 @@ import type { ProcessField, ProcessRow } from "./types";
 
 export const TIME_QUANTUM_FIELD = "time-quantum";
 
-/** Identifies one table cell in the set of invalid fields, e.g. "3-burst". */
 export function processFieldId(rowKey: number, field: ProcessField): string {
   return `${rowKey}-${field}`;
 }
@@ -20,10 +19,6 @@ type ValidationResult =
   | { success: true; input: SimInput }
   | { success: false; invalidFields: Set<string> };
 
-/**
- * Runs the form through the zod schema. On failure, returns the ids of the fields to highlight.
- * Hidden fields (time quantum outside Round Robin, priority when unchecked) are left out entirely.
- */
 export function validateForm({
   algorithm,
   rows,

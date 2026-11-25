@@ -54,7 +54,6 @@ export function SimulatorPage() {
       </main>
 
       <ToastViewport>
-        {/* No autoDismissMs: the error stays until dismissed, since the highlighted fields still need fixing. */}
         {form.error && (
           <Toast
             key={form.error.id}

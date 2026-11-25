@@ -4,7 +4,6 @@ import { algorithmIdSchema } from "./schema";
 import { MAX_PROCESSES, type FormError, type ProcessField, type ProcessRow } from "./types";
 import { validateForm } from "./validation";
 
-/** Reads ?algorithm= from the URL (set by the homepage button), falling back to FCFS. */
 function algorithmFromUrl(): AlgorithmId {
   const requested = new URLSearchParams(window.location.search).get("algorithm");
   const parsed = algorithmIdSchema.safeParse(requested);
@@ -15,7 +14,6 @@ function emptyRow(key: number): ProcessRow {
   return { key, arrival: "", burst: "", priority: "" };
 }
 
-/** All state and actions for the simulator's input form. */
 export function useSimulationForm() {
   const [algorithm, setAlgorithm] = useState<AlgorithmId>(algorithmFromUrl);
   const [priorityChecked, setPriorityChecked] = useState(false);
@@ -33,7 +31,6 @@ export function useSimulationForm() {
   const dismissError = () => setError(null);
 
   const needsTimeQuantum = algorithm === "rr";
-  // Priority Scheduling can't run without priorities, so the checkbox is forced on.
   const priorityRequired = algorithm === "priority";
   const showPriority = priorityChecked || priorityRequired;
   const canAddRow = rows.length < MAX_PROCESSES;
@@ -75,7 +72,6 @@ export function useSimulationForm() {
 
     setInvalidFields(new Set());
     dismissError();
-    // TODO: pass result.input (a SimInput) to the scheduling engine once it exists, then render its output.
   };
 
   return {

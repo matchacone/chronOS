@@ -16,7 +16,6 @@ interface ProcessPanelProps {
 
 const headCellClass = "px-2 pb-2 text-[0.8125rem] font-semibold text-muted md:whitespace-nowrap";
 
-/** The process table, plus the Add Process and Run Simulation buttons under it. */
 export function ProcessPanel({
   rows,
   showPriority,

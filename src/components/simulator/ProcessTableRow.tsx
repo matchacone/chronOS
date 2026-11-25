@@ -3,7 +3,6 @@ import { fieldClass, secondaryButtonClass } from "../styles";
 
 interface ProcessTableRowProps {
   row: ProcessRow;
-  /** Display name, e.g. "P3". */
   name: string;
   showPriority: boolean;
   canRemove: boolean;

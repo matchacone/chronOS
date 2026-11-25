@@ -2,7 +2,6 @@ import type { AlgorithmId } from "../algorithms";
 import { primaryButtonClass } from "./styles";
 
 interface CreateSimulationLinkProps {
-  /** Algorithm currently selected on the clock dial; the simulator opens with it preselected. */
   algorithmId: AlgorithmId;
 }
 

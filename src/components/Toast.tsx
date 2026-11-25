@@ -6,14 +6,9 @@ interface ToastProps {
   title: string;
   message: string;
   onDismiss: () => void;
-  /** Close automatically after this many ms. Leave out to keep the toast until it is dismissed. */
   autoDismissMs?: number;
 }
 
-/**
- * A single notification card. Render it inside <ToastViewport> and give it a new `key`
- * for each new message so screen readers announce it again.
- */
 export function Toast({ kind, title, message, onDismiss, autoDismissMs }: ToastProps) {
   const [paused, setPaused] = useState(false);
   const onDismissRef = useRef(onDismiss);
@@ -22,7 +17,6 @@ export function Toast({ kind, title, message, onDismiss, autoDismissMs }: ToastP
     onDismissRef.current = onDismiss;
   }, [onDismiss]);
 
-  // The timer stops while the toast is hovered or focused, so it never vanishes mid-read.
   useEffect(() => {
     if (autoDismissMs === undefined || paused) return;
     const timer = window.setTimeout(() => onDismissRef.current(), autoDismissMs);
@@ -65,10 +59,6 @@ interface ToastViewportProps {
   children: ReactNode;
 }
 
-/**
- * Fixed slot for toasts: full width along the top on phones (so it never covers the form's
- * bottom actions), bottom-right from md up. --toast-from sets which edge they slide in from.
- */
 export function ToastViewport({ children }: ToastViewportProps) {
   return (
     <div className="pointer-events-none fixed inset-x-4 top-4 z-50 flex flex-col items-end gap-2 [--toast-from:-0.75rem] md:inset-x-auto md:top-auto md:right-8 md:bottom-8 md:w-[26rem] md:[--toast-from:0.75rem]">

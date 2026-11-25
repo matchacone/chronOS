@@ -4,7 +4,6 @@ export type ThemeMode = "dark" | "light";
 
 const STORAGE_KEY = "chronos-theme";
 
-// Storage can throw in private windows or with site data blocked; fall back to dark.
 function readStoredTheme(): ThemeMode {
   try {
     return localStorage.getItem(STORAGE_KEY) === "light" ? "light" : "dark";
@@ -21,12 +20,9 @@ function applyTheme(theme: ThemeMode): void {
   }
   try {
     localStorage.setItem(STORAGE_KEY, theme);
-  } catch {
-    // Theme still applies for this page; it just won't carry over to the next one.
-  }
+  } catch {}
 }
 
-/** Current theme plus a toggle. The choice is saved so it carries across pages. */
 export function useTheme(): [ThemeMode, () => void] {
   const [theme, setTheme] = useState<ThemeMode>(readStoredTheme);
 

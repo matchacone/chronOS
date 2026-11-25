@@ -134,7 +134,6 @@
   box-shadow: 0 0 12px var(--dial-glow-core);
 }
 
-/* Toasts slide in from their screen edge so a new message is noticed; reduced motion disables it below. */
 @keyframes toast-in {
   from {
     opacity: 0;
