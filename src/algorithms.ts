@@ -1,14 +1,17 @@
-export type AlgorithmId =
-  | "fcfs"
-  | "sjf"
-  | "srt"
-  | "priority"
-  | "rr"
-  | "ljf"
-  | "hrrn"
-  | "mlq"
-  | "mlfq"
-  | "lrtf";
+export const ALGORITHM_IDS = [
+  "fcfs",
+  "sjf",
+  "srt",
+  "priority",
+  "rr",
+  "ljf",
+  "hrrn",
+  "mlq",
+  "mlfq",
+  "lrtf",
+] as const;
+
+export type AlgorithmId = (typeof ALGORITHM_IDS)[number];
 
 export interface SchedulingAlgorithm {
   id: AlgorithmId;
