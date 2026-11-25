@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #070a12;
+  --bg-elevated: #0d1424;
+  --dial-surface: #0b1222;
+  --dial-brass: #deb864;
+  --dial-brass-bright: #f2d68d;
+  --dial-brass-dim: #9e8145;
+  --dial-gear-fill: rgba(222, 184, 100, 0.08);
+  --dial-gear-stroke: rgba(222, 184, 100, 0.34);
+  --dial-glow-core: rgba(34, 82, 158, 0.36);
+  --dial-glow-mid: rgba(18, 40, 86, 0.14);
+  --dial-ink-contrast: #070a12;
+  --text: #f5efe0;
+  --text-muted: #c2b9a5;
+  --accent: #e6bf6b;
+  --accent-ink: #120d03;
+  --station-bg: rgba(11, 18, 34, 0.94);
+  --station-border: rgba(222, 184, 100, 0.36);
+  --station-hover-bg: rgba(24, 35, 62, 0.96);
+  --station-hover-border: #f2d68d;
+  --rule: rgba(222, 184, 100, 0.24);
+  --focus-ring: #7cc4ff;
+  --font-display: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, "Times New Roman", serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4efe2;
+  --bg-elevated: #ebe1cd;
+  --dial-surface: #e8dec8;
+  --dial-brass: #7d561c;
+  --dial-brass-bright: #5c3d10;
+  --dial-brass-dim: #947240;
+  --dial-gear-fill: rgba(107, 77, 36, 0.12);
+  --dial-gear-stroke: rgba(92, 65, 29, 0.42);
+  --dial-glow-core: rgba(184, 146, 86, 0.22);
+  --dial-glow-mid: rgba(214, 186, 138, 0.08);
+  --dial-ink-contrast: #f4efe2;
+  --text: #221910;
+  --text-muted: #574634;
+  --accent: #734c16;
+  --accent-ink: #fbf7ee;
+  --station-bg: rgba(244, 239, 226, 0.96);
+  --station-border: rgba(115, 76, 22, 0.36);
+  --station-hover-bg: rgba(235, 225, 205, 0.98);
+  --station-hover-border: #5c3d10;
+  --rule: rgba(115, 76, 22, 0.24);
+  --focus-ring: #1d4ed8;
+}
+
+@theme inline {
+  --color-canvas: var(--bg);
+  --color-ink: var(--text);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-station: var(--station-bg);
+  --color-station-border: var(--station-border);
+  --color-station-hover: var(--station-hover-bg);
+  --color-station-hover-border: var(--station-hover-border);
+  --color-rule: var(--rule);
+  --color-brass-bright: var(--dial-brass-bright);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  button,
+  a[href],
+  summary,
+  select {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  :focus-visible {
+    outline: 2.5px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+}
+
+/* Subtle celestial field in Dark Celestial mode; clean parchment tint in Light mode */
+.celestial-sky {
+  background-image:
+    radial-gradient(1.5px 1.5px at 14% 22%, rgba(242, 214, 141, 0.55) 50%, transparent 100%),
+    radial-gradient(1px 1px at 28% 76%, rgba(245, 239, 224, 0.45) 50%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 42% 16%, rgba(167, 202, 255, 0.5) 50%, transparent 100%),
+    radial-gradient(1px 1px at 64% 84%, rgba(242, 214, 141, 0.45) 50%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 78% 12%, rgba(245, 239, 224, 0.5) 50%, transparent 100%),
+    radial-gradient(1px 1px at 9% 64%, rgba(167, 202, 255, 0.4) 50%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 51% 48%, rgba(242, 214, 141, 0.35) 50%, transparent 100%);
+  opacity: 0.85;
+}
+
+:root[data-theme="light"] .celestial-sky {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(115, 76, 22, 0.04) 0%, transparent 48%),
+    radial-gradient(circle at 75% 75%, rgba(115, 76, 22, 0.05) 0%, transparent 55%);
+  opacity: 1;
+}
+
+.clock-roman {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  fill: var(--dial-brass-bright);
+  letter-spacing: 0.04em;
+}
+
+.clock-focal-needle {
+  box-shadow: 0 0 12px var(--dial-glow-core);
+}
+
+.station-label-selected-shadow {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
