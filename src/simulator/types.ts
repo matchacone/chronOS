@@ -11,10 +11,9 @@ export interface ProcessRow {
 
 export type ProcessField = "arrival" | "burst" | "priority";
 
-/** Result of the last Run Simulation click. `id` changes on every click so a repeated message still shows again. */
-export type FormStatus = {
+/** Validation error from the last Run Simulation click. `id` changes on every click so a repeated error shows again. */
+export type FormError = {
   id: number;
-  kind: "error" | "success";
   title: string;
   message: string;
 } | null;

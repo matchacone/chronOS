@@ -1,7 +1,7 @@
 import { useRef, useState, type FormEvent } from "react";
 import type { AlgorithmId } from "../algorithms";
 import { algorithmIdSchema } from "./schema";
-import { MAX_PROCESSES, type FormStatus, type ProcessField, type ProcessRow } from "./types";
+import { MAX_PROCESSES, type FormError, type ProcessField, type ProcessRow } from "./types";
 import { validateForm } from "./validation";
 
 /** Reads ?algorithm= from the URL (set by the homepage button), falling back to FCFS. */
@@ -23,14 +23,14 @@ export function useSimulationForm() {
   const nextRowKey = useRef(1);
   const [rows, setRows] = useState<ProcessRow[]>(() => [emptyRow(nextRowKey.current++)]);
   const [invalidFields, setInvalidFields] = useState<Set<string>>(new Set());
-  const [status, setStatus] = useState<FormStatus>(null);
-  const nextStatusId = useRef(1);
+  const [error, setError] = useState<FormError>(null);
+  const nextErrorId = useRef(1);
 
-  const showStatus = (kind: "error" | "success", title: string, message: string) => {
-    setStatus({ id: nextStatusId.current++, kind, title, message });
+  const showError = (title: string, message: string) => {
+    setError({ id: nextErrorId.current++, title, message });
   };
 
-  const dismissStatus = () => setStatus(null);
+  const dismissError = () => setError(null);
 
   const needsTimeQuantum = algorithm === "rr";
   // Priority Scheduling can't run without priorities, so the checkbox is forced on.
@@ -66,22 +66,16 @@ export function useSimulationForm() {
 
     if (!result.success) {
       setInvalidFields(result.invalidFields);
-      showStatus(
-        "error",
+      showError(
         "Some fields need fixing",
-        "Fill in every highlighted field with a whole number. Burst time and time quantum start at 1.",
+        "Use whole numbers with no negatives or decimals. Burst time and time quantum must be at least 1.",
       );
       return;
     }
 
     setInvalidFields(new Set());
+    dismissError();
     // TODO: pass result.input (a SimInput) to the scheduling engine once it exists, then render its output.
-    const count = `${result.input.processes.length} process${result.input.processes.length === 1 ? "" : "es"}`;
-    showStatus(
-      "success",
-      "Input looks good",
-      `Input is valid for ${count}. The simulation engine is not built yet, so there is nothing to show.`,
-    );
   };
 
   return {
@@ -100,8 +94,8 @@ export function useSimulationForm() {
     removeRow,
     updateRow,
     invalidFields,
-    status,
-    dismissStatus,
+    error,
+    dismissError,
     submit,
   };
 }

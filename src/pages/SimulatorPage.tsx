@@ -54,15 +54,14 @@ export function SimulatorPage() {
       </main>
 
       <ToastViewport>
-        {form.status && (
+        {/* No autoDismissMs: the error stays until dismissed, since the highlighted fields still need fixing. */}
+        {form.error && (
           <Toast
-            key={form.status.id}
-            kind={form.status.kind}
-            title={form.status.title}
-            message={form.status.message}
-            onDismiss={form.dismissStatus}
-            // Errors stay until dismissed; the highlighted fields still need attention.
-            autoDismissMs={form.status.kind === "success" ? 5000 : undefined}
+            key={form.error.id}
+            kind="error"
+            title={form.error.title}
+            message={form.error.message}
+            onDismiss={form.dismissError}
           />
         )}
       </ToastViewport>
