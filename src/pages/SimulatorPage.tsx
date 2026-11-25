@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { OptionsPanel } from "../components/simulator/OptionsPanel";
 import { ProcessPanel } from "../components/simulator/ProcessPanel";
 import { SimulatorHeader } from "../components/simulator/SimulatorHeader";
-import { StatusMessage } from "../components/simulator/StatusMessage";
+import { Toast, ToastViewport } from "../components/Toast";
 import { useSimulationForm } from "../simulator/useSimulationForm";
 import { TIME_QUANTUM_FIELD } from "../simulator/validation";
 import { useTheme } from "../theme";
@@ -22,7 +22,7 @@ export function SimulatorPage() {
 
       <SimulatorHeader theme={theme} onToggleTheme={toggleTheme} />
 
-      <main className="relative z-10 mx-auto w-full max-w-6xl px-[clamp(1rem,4vw,4.5rem)] pt-6 pb-12">
+      <main className="relative z-10 mx-auto w-full max-w-6xl px-[clamp(1rem,4vw,4.5rem)] pt-6 pb-12 md:pb-36">
         <h1 className="m-0 mb-6 font-display text-[clamp(1.75rem,4vw,2.5rem)] leading-tight font-bold tracking-[-0.01em]">
           Create scheduling simulation
         </h1>
@@ -50,10 +50,22 @@ export function SimulatorPage() {
             onRemoveRow={form.removeRow}
             onUpdateRow={form.updateRow}
           />
-
-          <StatusMessage status={form.status} />
         </form>
       </main>
+
+      <ToastViewport>
+        {form.status && (
+          <Toast
+            key={form.status.id}
+            kind={form.status.kind}
+            title={form.status.title}
+            message={form.status.message}
+            onDismiss={form.dismissStatus}
+            // Errors stay until dismissed; the highlighted fields still need attention.
+            autoDismissMs={form.status.kind === "success" ? 5000 : undefined}
+          />
+        )}
+      </ToastViewport>
     </div>
   );
 }

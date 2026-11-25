@@ -134,6 +134,22 @@
   box-shadow: 0 0 12px var(--dial-glow-core);
 }
 
+/* Toasts slide in from their screen edge so a new message is noticed; reduced motion disables it below. */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--toast-from, 0.75rem));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.toast-enter {
+  animation: toast-in 200ms ease-out;
+}
+
 .station-label-selected-shadow {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
 }

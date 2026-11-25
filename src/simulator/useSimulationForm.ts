@@ -24,6 +24,13 @@ export function useSimulationForm() {
   const [rows, setRows] = useState<ProcessRow[]>(() => [emptyRow(nextRowKey.current++)]);
   const [invalidFields, setInvalidFields] = useState<Set<string>>(new Set());
   const [status, setStatus] = useState<FormStatus>(null);
+  const nextStatusId = useRef(1);
+
+  const showStatus = (kind: "error" | "success", title: string, message: string) => {
+    setStatus({ id: nextStatusId.current++, kind, title, message });
+  };
+
+  const dismissStatus = () => setStatus(null);
 
   const needsTimeQuantum = algorithm === "rr";
   // Priority Scheduling can't run without priorities, so the checkbox is forced on.
@@ -59,20 +66,22 @@ export function useSimulationForm() {
 
     if (!result.success) {
       setInvalidFields(result.invalidFields);
-      setStatus({
-        kind: "error",
-        message: "Fill in every highlighted field with a whole number. Burst time and time quantum start at 1.",
-      });
+      showStatus(
+        "error",
+        "Some fields need fixing",
+        "Fill in every highlighted field with a whole number. Burst time and time quantum start at 1.",
+      );
       return;
     }
 
     setInvalidFields(new Set());
     // TODO: pass result.input (a SimInput) to the scheduling engine once it exists, then render its output.
     const count = `${result.input.processes.length} process${result.input.processes.length === 1 ? "" : "es"}`;
-    setStatus({
-      kind: "success",
-      message: `Input is valid for ${count}. The simulation engine is not built yet, so there is nothing to show.`,
-    });
+    showStatus(
+      "success",
+      "Input looks good",
+      `Input is valid for ${count}. The simulation engine is not built yet, so there is nothing to show.`,
+    );
   };
 
   return {
@@ -92,6 +101,7 @@ export function useSimulationForm() {
     updateRow,
     invalidFields,
     status,
+    dismissStatus,
     submit,
   };
 }
