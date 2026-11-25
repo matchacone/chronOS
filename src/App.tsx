@@ -1,29 +1,17 @@
-import { useEffect, useRef, useState, type WheelEvent as ReactWheelEvent } from "react";
+import { useRef, useState, type WheelEvent as ReactWheelEvent } from "react";
 import { SCHEDULING_ALGORITHMS } from "./algorithms";
 import { ClockWheelSelector } from "./components/ClockWheelSelector";
+import { CreateSimulationLink } from "./components/CreateSimulationLink";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { useTheme } from "./theme";
 import "./index.css";
 
-type ThemeMode = "dark" | "light";
-
 export function App() {
-  const [theme, setTheme] = useState<ThemeMode>("dark");
+  const [theme, toggleTheme] = useTheme();
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const wheelDeltaRef = useRef<((deltaY: number) => void) | null>(null);
 
   const activeAlgorithm = SCHEDULING_ALGORITHMS[activeIndex] ?? SCHEDULING_ALGORITHMS[0]!;
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    if (metaTheme) {
-      metaTheme.setAttribute("content", theme === "dark" ? "#070a12" : "#f4efe2");
-    }
-  }, [theme]);
-
-  const handleToggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
 
   const handleCanvasWheel = (event: ReactWheelEvent<HTMLDivElement>) => {
     if (wheelDeltaRef.current) {
@@ -32,7 +20,6 @@ export function App() {
     }
   };
 
-  // TODO: Wire activeAlgorithm.id into the future CPU scheduling simulator route/workspace.
   return (
     <div
       className="landing-shell relative flex min-h-svh w-full flex-col overflow-hidden bg-canvas text-ink transition-colors duration-250"
@@ -41,7 +28,7 @@ export function App() {
       <div className="celestial-sky pointer-events-none absolute inset-0 z-0" aria-hidden="true" />
 
       <header className="site-header relative z-20 flex items-center justify-end px-[clamp(1rem,4vw,4.5rem)] pt-[clamp(1rem,2.5vw,2rem)]">
-        <ThemeToggle theme={theme} onToggle={handleToggleTheme} />
+        <ThemeToggle theme={theme} onToggle={toggleTheme} />
       </header>
 
       <main className="landing-main relative z-10 grid w-full flex-1 grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr] items-end gap-6 px-[clamp(1rem,4vw,2rem)] min-[960px]:grid-cols-[minmax(280px,44%)_minmax(0,1fr)] min-[960px]:grid-rows-none min-[960px]:items-center min-[960px]:gap-0 min-[960px]:pl-[clamp(1.25rem,5vw,4.5rem)] min-[960px]:pr-0 max-[1180px]:min-[960px]:grid-cols-[minmax(260px,40%)_minmax(0,1fr)]">
@@ -80,6 +67,8 @@ export function App() {
               {activeAlgorithm.summary}
             </p>
           </div>
+
+          <CreateSimulationLink algorithmId={activeAlgorithm.id} />
         </section>
 
         <ClockWheelSelector

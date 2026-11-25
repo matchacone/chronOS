@@ -84,11 +84,15 @@
   button,
   a[href],
   summary,
-  select {
+  select,
+  input[type="checkbox"],
+  label:has(> input[type="checkbox"]) {
     cursor: pointer;
   }
 
-  button:disabled {
+  button:disabled,
+  input:disabled,
+  label:has(> input:disabled) {
     cursor: not-allowed;
   }
 
