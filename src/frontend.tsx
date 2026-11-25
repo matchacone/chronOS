@@ -8,13 +8,11 @@
 import { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { App } from "./App";
+import { SimulatorPage } from "./pages/SimulatorPage";
 
 const elem = document.getElementById("root")!;
-const app = (
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+const isSimulatorRoute = window.location.pathname.replace(/\/+$/, "") === "/simulate";
+const app = <StrictMode>{isSimulatorRoute ? <SimulatorPage /> : <App />}</StrictMode>;
 
 // https://bun.com/docs/bundler/hot-reloading#import-meta-hot-data
 type HotData = { root?: Root };

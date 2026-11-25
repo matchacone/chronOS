@@ -84,11 +84,15 @@
   button,
   a[href],
   summary,
-  select {
+  select,
+  input[type="checkbox"],
+  label:has(> input[type="checkbox"]) {
     cursor: pointer;
   }
 
-  button:disabled {
+  button:disabled,
+  input:disabled,
+  label:has(> input:disabled) {
     cursor: not-allowed;
   }
 
@@ -128,6 +132,21 @@
 
 .clock-focal-needle {
   box-shadow: 0 0 12px var(--dial-glow-core);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--toast-from, 0.75rem));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.toast-enter {
+  animation: toast-in 200ms ease-out;
 }
 
 .station-label-selected-shadow {
